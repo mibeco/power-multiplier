@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "postgres-mcp": {
+      "command": "uvx",
+      "args": ["postgres-mcp@latest"],
+      "env": {
+        "DATABASE_URL": "${env:DATABASE_URL}"
+      },
+      "timeout": 60000,
+      "autoApprove": ["describe_table", "list_tables"]
+    },
+    "schema-analyzer": {
+      "type": "http",
+      "url": "http://localhost:8080/mcp",
+      "timeout": 30000,
+      "autoApprove": ["analyze_schema", "check_normalization"]
+    }
+  }
+}
