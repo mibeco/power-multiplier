@@ -22,28 +22,35 @@ Follow this sequence to publish your power:
 
 ### Required Files
 
-Your repository must contain these files at the root level:
+Your power subdirectory must contain these files:
 
-| File | Purpose | Required |
-|------|---------|----------|
-| `POWER.md` | Power metadata and instructions | ✅ Yes |
-| `README.md` | Human-readable documentation | Recommended |
-| `LICENSE` | Usage terms (MIT recommended) | Recommended |
-| `mcp.json` | MCP server configuration | If using MCP |
-| `steering/` | Workflow guidance files | If using steering |
+| File | Location | Required |
+|------|----------|----------|
+| `POWER.md` | In power subdirectory | ✅ Yes |
+| `mcp.json` | In power subdirectory | If using MCP |
+| `steering/*.md` | In power subdirectory | If using steering |
+| `README.md` | At repo root (not in power dir) | Recommended |
+| `LICENSE` | At repo root (not in power dir) | Recommended |
+
+**Note:** Only `POWER.md`, `mcp.json`, and `steering/*.md` files are allowed inside the power subdirectory. README, LICENSE, and other files should be at the repository root.
 
 ### Repository Structure
 
+**Important:** Powers must be in a subdirectory, not at the repository root.
+
 ```
-your-power/                    # Repository root
-├── POWER.md                   # Required - Kiro reads this
-├── README.md                  # For GitHub visitors
-├── LICENSE                    # MIT recommended
-├── mcp.json                   # Optional - MCP servers
-└── steering/                  # Optional - steering files
-    ├── workflow1.md
-    └── workflow2.md
+your-repo/                     # Repository root
+├── README.md                  # For GitHub visitors (at repo root)
+├── LICENSE                    # MIT recommended (at repo root)
+└── your-power-name/           # Power subdirectory (required!)
+    ├── POWER.md               # Required - Kiro reads this
+    ├── mcp.json               # Optional - MCP servers
+    └── steering/              # Optional - steering files
+        ├── workflow1.md
+        └── workflow2.md
 ```
+
+The subdirectory name should match your power's `name` field in POWER.md frontmatter.
 
 ### Repository Settings
 
@@ -255,16 +262,32 @@ git push -u origin main
 
 ## Installation URL Format
 
-Once published, your power can be installed using:
+**Important:** Kiro requires powers to be in a subdirectory within the repository. The URL must point to the subdirectory containing POWER.md, not just the repository root.
+
+### Correct URL Format
 
 ```
-https://github.com/your-username/your-power-name
+https://github.com/{owner}/{repo}/tree/main/{power-name}
 ```
 
 **Examples:**
-- `https://github.com/stripe/stripe-mcp-power`
-- `https://github.com/kirodotdev/cloud-architect`
-- `https://github.com/your-username/my-awesome-power`
+- `https://github.com/kirodotdev/powers/tree/main/stripe`
+- `https://github.com/kirodotdev/powers/tree/main/neon`
+- `https://github.com/mibeco/power-multiplier/tree/main/power-multiplier`
+
+### Repository Structure
+
+Your repository should have this structure:
+
+```
+your-repo/                     # Repository root
+├── README.md                  # For GitHub visitors (optional)
+└── your-power-name/           # Power subdirectory (required)
+    ├── POWER.md               # Required - Kiro reads this
+    ├── mcp.json               # Optional - MCP servers
+    └── steering/              # Optional - steering files
+        └── *.md
+```
 
 ### URL Requirements
 
@@ -272,9 +295,15 @@ https://github.com/your-username/your-power-name
 |-------------|---------|
 | Protocol | `https://` (required) |
 | Host | `github.com` |
-| Path | `username/repository-name` |
-| Branch | Uses default branch (main/master) |
-| POWER.md | Must be at repository root |
+| Path | `{owner}/{repo}/tree/main/{power-subdirectory}` |
+| Branch | `main` (or your default branch) |
+| POWER.md | Must be in the subdirectory, not repo root |
+
+### Common Mistake
+
+❌ **Wrong:** `https://github.com/your-username/your-power` (points to repo root)
+
+✅ **Correct:** `https://github.com/your-username/your-power/tree/main/your-power` (points to subdirectory)
 
 ## Verifying Publication
 
