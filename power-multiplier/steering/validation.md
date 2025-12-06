@@ -6,16 +6,94 @@ inclusion: always
 
 ## Overview
 
-This guide helps you validate your Kiro Power before publishing or local testing. Validation ensures your power meets Kiro's requirements and will work correctly when installed. A thorough validation catches common issues early, saving time and frustration.
+This guide helps you validate your Kiro Power before publishing or local testing. Validation ensures your power meets Kiro's requirements and will work correctly when installed.
+
+**Important:** Kiro has two separate validation layers:
+
+1. **Power Package Validation** (External Service) - Validates repository structure when installing from GitHub
+2. **MCP Configuration Validation** (Kiro IDE) - Validates JSON schema for MCP server configuration
+
+Understanding both layers helps you avoid common installation failures.
+
+## Two-Layer Validation System
+
+### Layer 1: Power Package Validation (External)
+
+When you install a power from GitHub, an external validation service checks:
+
+| Check | Requirement |
+|-------|-------------|
+| ✅ Repository structure | Power must be in a subdirectory |
+| ✅ Allowed files only | Only `POWER.md`, `mcp.json`, `steering/*.md` |
+| ✅ Valid POWER.md | Must have valid YAML frontmatter |
+| ✅ Required frontmatter fields | `name`, `displayName`, `description`, `keywords` |
+
+**Disallowed files in power directory:**
+- `.git`, `.gitkeep`, `.gitignore`
+- `README.md`, `LICENSE` (put these at repo root, not in power directory)
+- Binary files, scripts, archives
+- Any files outside the allowed list
+
+### Layer 2: MCP Configuration Validation (Kiro IDE)
+
+When Kiro loads MCP server configuration, it validates:
+
+| Check | Requirement |
+|-------|-------------|
+| ✅ Valid JSON syntax | No syntax errors |
+| ✅ Required fields | `command` for stdio, `url` for HTTP |
+| ✅ Field types | Correct data types per schema |
+| ✅ URL patterns | HTTP URLs must match `^https?://` |
+
+**Note:** This validation does NOT check GitHub repository structure - that's handled by Layer 1.
 
 ## Validation Workflow
 
 Follow this sequence to validate your power:
 
-1. **Validate POWER.md** - Check metadata and content structure
-2. **Validate mcp.json** - Verify server configuration (if present)
-3. **Validate steering files** - Check frontmatter and references (if present)
-4. **Cross-file validation** - Ensure consistency across files
+1. **Validate repository structure** - Ensure correct directory layout
+2. **Validate POWER.md** - Check metadata and content structure
+3. **Validate mcp.json** - Verify server configuration (if present)
+4. **Validate steering files** - Check frontmatter and references (if present)
+5. **Cross-file validation** - Ensure consistency across files
+
+## Repository Structure Validation
+
+### Required Structure
+
+```
+your-repo/                     # Repository root
+├── README.md                  # OK at repo root
+├── LICENSE                    # OK at repo root
+└── your-power-name/           # Power subdirectory (required!)
+    ├── POWER.md               # Required
+    ├── mcp.json               # Optional
+    └── steering/              # Optional
+        └── *.md               # Only .md files allowed
+```
+
+### Allowed Files in Power Directory
+
+| File/Directory | Allowed |
+|----------------|---------|
+| `POWER.md` | ✅ Required |
+| `mcp.json` | ✅ Optional |
+| `steering/*.md` | ✅ Optional |
+| `README.md` | ❌ Put at repo root |
+| `LICENSE` | ❌ Put at repo root |
+| `.git*` files | ❌ Not allowed |
+| `.gitkeep` | ❌ Not allowed |
+| Binary files | ❌ Not allowed |
+| Scripts | ❌ Not allowed |
+
+### Installation URL Format
+
+The GitHub URL must point to the power subdirectory:
+
+```
+✅ Correct: https://github.com/{owner}/{repo}/tree/main/{power-name}
+❌ Wrong:   https://github.com/{owner}/{repo}
+```
 
 ## POWER.md Validation Checklist
 
@@ -308,6 +386,20 @@ grep -o "steering/[a-z-]*.md" POWER.md | sort -u
 ```
 
 ## Common Errors and Remediation
+
+### Power Package Validation Errors (External Service)
+
+These errors occur when installing from GitHub:
+
+| Error | Cause | Remediation |
+|-------|-------|-------------|
+| "No valid power found in the repository" | POWER.md not in subdirectory | Move power files to a subdirectory matching power name |
+| "No valid power found in the repository" | URL points to repo root | Use URL with `/tree/main/{power-name}` path |
+| "Power contains disallowed files" | README.md in power directory | Move README.md to repo root |
+| "Power contains disallowed files" | LICENSE in power directory | Move LICENSE to repo root |
+| "Power contains disallowed files" | .gitkeep files present | Remove .gitkeep files from power directory |
+| "Power contains disallowed files" | Binary or script files | Remove non-allowed files from power directory |
+| "Power validation failed" | Invalid POWER.md frontmatter | Fix YAML syntax and required fields |
 
 ### POWER.md Errors
 
