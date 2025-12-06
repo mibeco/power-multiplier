@@ -392,6 +392,106 @@ When testing reveals issues:
 | Tools failing | Set environment variables, check API keys |
 | Slow activation | Reduce steering file size, optimize content |
 
+## End-to-End Test: Create a Test Power
+
+The best way to validate the Power Multiplier is to use it to create a simple power from scratch.
+
+### Test 1: Create a Simple "Hello" Power
+
+1. **Start a new chat** and say:
+   ```
+   "Create a new power called hello-world that greets users"
+   ```
+
+2. **Expected behavior:**
+   - Power Multiplier activates
+   - Prompts for power metadata (name, displayName, description, keywords)
+   - Generates POWER.md with valid frontmatter
+   - Creates appropriate directory structure
+
+3. **Verify the output:**
+   - Check that `hello-world/POWER.md` was created
+   - Verify frontmatter has all required fields
+   - Confirm the content is relevant to greeting users
+
+### Test 2: Add MCP Server Configuration
+
+1. **Continue the conversation:**
+   ```
+   "Add an MCP server to my hello-world power"
+   ```
+
+2. **Expected behavior:**
+   - Prompts for server type (stdio, http, remote)
+   - Collects required configuration
+   - Generates valid mcp.json
+
+3. **Verify the output:**
+   - Check that `hello-world/mcp.json` was created
+   - Validate JSON syntax
+   - Confirm server configuration is complete
+
+### Test 3: Create a Steering File
+
+1. **Continue the conversation:**
+   ```
+   "Create a steering file for greeting customization"
+   ```
+
+2. **Expected behavior:**
+   - Prompts for inclusion type
+   - Generates steering file with valid frontmatter
+   - Updates POWER.md with steering file reference
+
+3. **Verify the output:**
+   - Check that `hello-world/steering/customization.md` was created
+   - Verify frontmatter has `inclusion` field
+   - Confirm POWER.md references the new file
+
+### Test 4: Validate the Power
+
+1. **Ask for validation:**
+   ```
+   "Validate my hello-world power"
+   ```
+
+2. **Expected behavior:**
+   - Checks POWER.md frontmatter
+   - Validates mcp.json syntax
+   - Verifies steering file frontmatter
+   - Reports any issues with remediation steps
+
+3. **Verify the output:**
+   - All checks should pass
+   - No errors reported
+
+### Test 5: Test Different Activation Keywords
+
+Try these prompts to verify keyword activation:
+
+| Prompt | Should Activate? |
+|--------|------------------|
+| "I want to create a new Kiro power" | ✅ Yes |
+| "Help me build a power" | ✅ Yes |
+| "How do I configure MCP servers?" | ✅ Yes |
+| "What's the weather today?" | ❌ No |
+| "Validate my power" | ✅ Yes |
+| "How do I publish my power?" | ✅ Yes |
+
+### Test 6: Verify Steering Files Load
+
+For each steering file, verify it loads when relevant:
+
+| Topic | Expected Steering File |
+|-------|----------------------|
+| Creating a new power | `scaffolding.md` |
+| Writing POWER.md | `power-md-guide.md` |
+| MCP configuration | `mcp-config.md` |
+| Steering files | `steering-files.md` |
+| Validation | `validation.md` |
+| Testing | `testing.md` |
+| Publishing | `publishing.md` |
+
 ## Next Steps
 
 After successful testing:
