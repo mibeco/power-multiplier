@@ -1,8 +1,8 @@
 ---
 name: "power-multiplier"
 displayName: "Power Multiplier"
-description: "Create Kiro Powers with guided assistance - scaffold projects, configure MCP servers, write steering files, and validate before publishing"
-keywords: ["power", "create power", "build power", "power multiplier", "multiply powers", "mcp", "steering", "kiro power", "new power"]
+description: "Create Kiro Powers with guided assistance"
+keywords: ["power","create power","build power","power multiplier","mcp","steering","kiro power"]
 author: "Kiro Community"
 ---
 
