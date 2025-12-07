@@ -66,3 +66,7 @@ https://github.com/{owner}/{repo}/tree/main/{power-name}
 ```
 
 Not just `https://github.com/{owner}/{repo}`
+
+## Author
+
+The Power Multiplier was created by Michael Bennett Cohn, with a little help from Kiro. Send feedback to mbcohn@amazon.com.
